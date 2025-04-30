@@ -58,7 +58,7 @@
     }
   </style>
 </head>
-<body onclick="playSound()">
+<body onclick="startCountdown()">
 
   <audio id="creepyAudio" preload="auto">
     <source src="https://www.soundjay.com/horror/sounds/horror-ambience-2.mp3" type="audio/mp3">
@@ -75,30 +75,34 @@
 
   <script>
     let timeLeft = 30;
+    let timerStarted = false;
     const countdownEl = document.getElementById("countdown");
     const flash = document.getElementById("flash");
     const creepyAudio = document.getElementById("creepyAudio");
 
-    function playSound() {
-      creepyAudio.play().catch(e => {
-        console.log("Audio play blocked:", e);
-      });
+    function startCountdown() {
+      if (timerStarted) return;
+      timerStarted = true;
+
+      const timer = setInterval(() => {
+        timeLeft--;
+        countdownEl.textContent = timeLeft;
+
+        if (timeLeft === 10) {
+          creepyAudio.play().catch(e => console.log("Autoplay blocked:", e));
+        }
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          countdownEl.style.display = "none";
+          flash.style.opacity = 1;
+
+          setTimeout(() => {
+            flash.style.opacity = 0;
+          }, 500);
+        }
+      }, 1000);
     }
-
-    const timer = setInterval(() => {
-      timeLeft--;
-      countdownEl.textContent = timeLeft;
-
-      if (timeLeft <= 0) {
-        clearInterval(timer);
-        countdownEl.style.display = "none";
-        flash.style.opacity = 1;
-
-        setTimeout(() => {
-          flash.style.opacity = 0;
-        }, 500);
-      }
-    }, 1000);
   </script>
 
 </body>
