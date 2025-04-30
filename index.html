@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cursed Countdown</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nosifer&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Courier New', monospace;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 5vw;
+      margin-bottom: 5px;
+    }
+
+    #countdown {
+      font-size: 10vw;
+      color: red;
+      margin: 10px 0;
+    }
+
+    .creepy-text {
+      font-family: 'Nosifer', cursive;
+      font-size: 9vw;
+      color: red;
+      animation: flicker 0.2s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+
+    #flash {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.1s;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      color: gray;
+      font-size: 3vw;
+    }
+  </style>
+</head>
+<body onclick="playSound()">
+
+  <audio id="creepyAudio" preload="auto">
+    <source src="https://www.soundjay.com/horror/sounds/horror-ambience-2.mp3" type="audio/mp3">
+  </audio>
+
+  <div class="creepy-text">RUN RUN RUN!!!</div>
+  <h1>Something horrible is going to happen...</h1>
+  <div id="countdown">30</div>
+  <div id="flash"></div>
+
+  <footer>
+    Made by Hasnain Abbasi
+  </footer>
+
+  <script>
+    let timeLeft = 30;
+    const countdownEl = document.getElementById("countdown");
+    const flash = document.getElementById("flash");
+    const creepyAudio = document.getElementById("creepyAudio");
+
+    function playSound() {
+      creepyAudio.play().catch(e => {
+        console.log("Audio play blocked:", e);
+      });
+    }
+
+    const timer = setInterval(() => {
+      timeLeft--;
+      countdownEl.textContent = timeLeft;
+
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        countdownEl.style.display = "none";
+        flash.style.opacity = 1;
+
+        setTimeout(() => {
+          flash.style.opacity = 0;
+        }, 500);
+      }
+    }, 1000);
+  </script>
+
+</body>
+</html>
